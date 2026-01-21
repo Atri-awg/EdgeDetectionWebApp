@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deteksi Tepi Real-time - Modular</title>
+    <link rel="stylesheet" href="styles.css">
+       
+    
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ Deteksi Tepi Real-time</h1>
+        <p class="subtitle">5 Operator - Arsitektur Modular</p>
+        
+        <!-- Mode Selection -->
+        <div class="mode-selection">
+            <button class="mode-btn active" id="webcamModeBtn" onclick="switchMode('webcam')">
+                📹 Webcam
+            </button>
+            <button class="mode-btn" id="uploadModeBtn" onclick="switchMode('upload')">
+                📁 Upload
+            </button>
+        </div>
+        
+        <!-- Controls -->
+        <div class="controls">
+            <button class="control-btn start-btn hidden" id="startBtn" onclick="startWebcam()">
+                ▶️ Mulai Webcam
+            </button>
+            <button class="control-btn stop-btn hidden" id="stopBtn" onclick="stopWebcam()">
+                ⏸️ Stop Webcam
+            </button>
+            <input type="file" id="fileInput" accept="image/*" onchange="handleFileUpload(event)">
+            <button class="control-btn upload-btn hidden" id="uploadBtn" onclick="document.getElementById('fileInput').click()">
+                📁 Pilih Gambar
+            </button>
+        </div>
+        
+        <!-- Threshold Control -->
+        <div class="threshold-control">
+            <label for="threshold">⚙️ Threshold:</label>
+            <input type="range" id="threshold" min="0" max="255" value="50" oninput="updateThreshold(this.value)">
+            <span id="thresholdValue">50</span>
+        </div>
+        
+        <!-- Operator Selection -->
+        <div class="operator-selection">
+            <h3>Pilih Operator:</h3>
+            <div class="operator-buttons">
+                <button class="operator-btn active" data-operator="sobel" onclick="toggleOperator('sobel', this)">Sobel</button>
+                <button class="operator-btn active" data-operator="roberts" onclick="toggleOperator('roberts', this)">Roberts</button>
+                <button class="operator-btn active" data-operator="prewitt" onclick="toggleOperator('prewitt', this)">Prewitt</button>
+                <button class="operator-btn active" data-operator="laplace" onclick="toggleOperator('laplace', this)">Laplace</button>
+                <button class="operator-btn active" data-operator="canny" onclick="toggleOperator('canny', this)">Canny</button>
+            </div>
+        </div>
+        
+        <!-- Hidden Video Element -->
+        <video id="videoElement" autoplay playsinline></video>
+        
+        <!-- Canvas Grid -->
+        <div class="canvas-grid" id="canvasGrid">
+            <div class="canvas-container">
+                <h3>Original</h3>
+                <canvas id="originalCanvas"></canvas>
+            </div>
+            <div class="canvas-container" id="sobelContainer">
+                <h3>Operator Sobel</h3>
+                <canvas id="sobelCanvas"></canvas>
+            </div>
+            <div class="canvas-container" id="robertsContainer">
+                <h3>Operator Roberts</h3>
+                <canvas id="robertsCanvas"></canvas>
+            </div>
+            <div class="canvas-container" id="prewittContainer">
+                <h3>Operator Prewitt</h3>
+                <canvas id="prewittCanvas"></canvas>
+            </div>
+            <div class="canvas-container" id="laplaceContainer">
+                <h3>Operator Laplace</h3>
+                <canvas id="laplaceCanvas"></canvas>
+            </div>
+            <div class="canvas-container" id="cannyContainer">
+                <h3>Operator Canny</h3>
+                <canvas id="cannyCanvas"></canvas>
+            </div>
+        </div>
+        
+        <!-- Info Box -->
+        <div class="info-box">
+            <h4>ℹ️ Informasi Struktur Modular:</h4>
+            <ul>
+                <li><strong>SobelOperator</strong>: Kernel 3x3 untuk deteksi gradien horizontal & vertikal</li>
+                <li><strong>RobertsOperator</strong>: Kernel 2x2 untuk deteksi diagonal</li>
+                <li><strong>PrewittOperator</strong>: Kernel 3x3 dengan bobot merata</li>
+                <li><strong>LaplaceOperator</strong>: Deteksi tepi menggunakan turunan kedua</li>
+                <li><strong>CannyOperator</strong>: Multi-stage edge detection (Gaussian blur + Sobel + NMS)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="operators.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
